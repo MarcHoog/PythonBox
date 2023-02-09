@@ -1,1 +1,0 @@
-# An simple todo application

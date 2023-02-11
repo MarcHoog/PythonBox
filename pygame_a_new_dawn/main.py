@@ -1,28 +1,20 @@
 import pygame
 import sys
-from manager import ScreenManager
+from manager import GameStateManager
 
-class Game:
+class Game: 
 
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((500, 500))
+        self.screen = pygame.display.set_mode((600, 800))
         pygame.display.set_caption("really Cool")
         self.clock = pygame.time.Clock()
-        self.running = True
-
-        self.manager = ScreenManager()
+        self.gamestatemngr = GameStateManager()
 
     def run(self):
-        while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    pygame.quit()
-                    sys.exit()
-
+        while True:
             self.screen.fill((0, 0, 0))
-            self.manager.run()
+            self.gamestatemngr.run()
             pygame.display.update()
             self.clock.tick(60)
 

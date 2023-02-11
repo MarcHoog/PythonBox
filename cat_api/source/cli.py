@@ -29,7 +29,7 @@ def meow(
         for _ in range(amount):
             cat = api.search_cat()
             typer.echo(f'{_ + 1} - url={cat["url"]} width={cat["width"]} height={cat["height"]}')
-            if download:
+            if download or path:
                 path = path if path else os.getcwd()
                 if not os.path.exists(path):
                     os.makedirs(path)

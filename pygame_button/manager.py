@@ -2,7 +2,7 @@ import pygame
 from abc import ABC, abstractmethod
 import sys
 from button import MyButtonGroup, Button
-from colors import WHITE,RED,GREEN,PURPLE,BLACK
+from colors import WHITE,RED,GREEN,PURPLE,BLACK,GRAY,DARK_GRAY
 # GLOBALS
 def draw_text(text,font,color,surface,x,y):
     
@@ -34,16 +34,17 @@ class MenuState(GameState):
     def __init__(self,display) -> None:
         super().__init__(display)
         self.button_group = MyButtonGroup()
+        Button(
+        150, 200, 300,50,'PRESS START', 
+        GRAY, BLACK,
+        self.button_group, 
+        self.set_transition, 'game'
+        )
 
     def update(self):
-        self.display.fill(BLACK)
-        draw_text('Main Menu', pygame.font.SysFont('comicsans', 60), WHITE, self.display, 20, 20)
-        Button(
-                200, 500, 200,50,'Play Now', 
-                PURPLE, GREEN,
-                self.button_group, 
-                self.set_transition, 'game'
-                )
+        self.display.fill(WHITE)
+        draw_text('Main Menu', pygame.font.SysFont('comicsans', 60), BLACK, self.display, 20, 20)
+
         
         pos = pygame.mouse.get_pos()
 
@@ -60,7 +61,7 @@ class MenuState(GameState):
             if button.is_over(pos):
                 if click:
                     button.click()
-
+        self.button_group.update()
         self.button_group.draw(self.display)
                 
 class GamePlayState(GameState):
@@ -68,16 +69,18 @@ class GamePlayState(GameState):
     def __init__(self,display) -> None:
         super().__init__(display)
         self.button_group = MyButtonGroup()
+        Button(
+        150, 200, 300,50,'MENU', 
+        GRAY, BLACK,
+        self.button_group, 
+        self.set_transition, 'main_menu'
+        )
 
     def update(self):
-        self.display.fill(BLACK)
-        draw_text('GamePlay', pygame.font.SysFont('comicsans', 60), WHITE, self.display, 20, 20)
-        Button(
-                200, 500, 200,50,'Menu', 
-                PURPLE, GREEN,
-                self.button_group, 
-                self.set_transition, 'main_menu'
-                )
+        self.display.fill(WHITE)
+        draw_text('Gameplay', pygame.font.SysFont('comicsans', 60), BLACK, self.display, 20, 20)
+        draw_text('I LOVE PYGAME <3',pygame.font.SysFont('comicsans', 60), BLACK, self.display, 50, 400)
+
         
         pos = pygame.mouse.get_pos()
 
@@ -94,9 +97,9 @@ class GamePlayState(GameState):
             if button.is_over(pos):
                 if click:
                     button.click()
-
+        self.button_group.update()
         self.button_group.draw(self.display)
-
+                
 class GameStateManager:
     def __init__(self):
         self.states = {'main_menu': MenuState,

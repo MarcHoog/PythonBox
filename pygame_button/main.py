@@ -8,12 +8,12 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((600, 800))
         pygame.display.set_caption("really Cool")
-        self.clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()    
         self.gamestatemngr = GameStateManager()
 
     def run(self):
         while True:
-            self.screen.fill((0, 0, 0))
+            self.screen.fill((255, 255, 255))
             self.gamestatemngr.run()
             pygame.display.update()
             self.clock.tick(60)

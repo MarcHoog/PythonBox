@@ -1,2 +1,4 @@
 /.venv/
-/pygame_a_new_dawn/__pycache__/
+/pygame_a_new_dawn/__pycache__
+/proxmox/my_secrets.py
+/proxmox/__pycache__

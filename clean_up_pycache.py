@@ -1,6 +1,10 @@
 import os
+import shutil
+
 
 for x in os.walk('.'):
-    if '__pycache__' in x[0]:
+    if x[0].startswith('.\\.venv'):
+        pass
+    elif '__pycache__' in x[0]:
         print('Removing {}'.format(x[0]))
-        os.removedirs(x[0])
+        shutil.rmtree(x[0])

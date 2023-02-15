@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import sys
 from player import Player
 from user_event import CHANGE_STATE, DETECTED
-
+from redfrog import Redfrog
 
 def draw_text(text,font,color,surface,x,y):
     
@@ -17,8 +17,7 @@ class Gameworld(ABC):
     def __init__(self,display,*args,**kwargs):
         self.display = display
         if 'player' in kwargs:
-            _ = kwargs['player']
-            self.player = _.player
+            self.player = kwargs['player']
 
     def enter(self):
         pass
@@ -44,12 +43,15 @@ class Overworld(Gameworld):
         self.obstacle_sprites = pygame.sprite.Group()
         self.visible_sprites.add(self.player)
 
+        self.redfrog = Redfrog(self.visible_sprites,position=(500,350))
+
     def update(self):
-        self.player.update()
+        self.visible_sprites.update()
 
     def draw(self):
         draw_text('OverWorld', pygame.font.SysFont('comicsans', 60), (0,0,0), self.display, 20, 20)
         self.visible_sprites.draw(self.display)
+        
 
 class Batteling(Gameworld):
     def __init__(self,display,*args,**kwargs) -> None:
@@ -100,7 +102,7 @@ class GameManager:
     def _switch_state(self, state):
         if self.state:
             self.state.exit()
-        self.state = self.states[state](self.display,self.player)
+        self.state = self.states[state](self.display,player=self.player)
         self.state.enter()
 
 

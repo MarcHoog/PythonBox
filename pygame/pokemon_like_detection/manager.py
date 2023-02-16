@@ -4,13 +4,10 @@ import sys
 from player import Player
 from user_event import CHANGE_STATE, DETECTED
 from redfrog import Redfrog
+from cameras import Camera
+from helper import draw_text
 
-def draw_text(text,font,color,surface,x,y):
-    
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
+
 
 class Gameworld(ABC):
 
@@ -34,24 +31,25 @@ class Gameworld(ABC):
     def draw(self):
         pass
  
-
 class Overworld(Gameworld):
     def __init__(self,display,*args,**kwargs) -> None:
         super().__init__(display,*args,**kwargs)
 
-        self.visible_sprites = pygame.sprite.Group()
-        self.obstacle_sprites = pygame.sprite.Group()
-        self.visible_sprites.add(self.player)
+        self.camera_group = Camera(self.display)
+        self.interactable_group = pygame.sprite.Group()
+        self.obstacle_group = pygame.sprite.Group()
+        self.camera_group.add(self.player)
 
-        self.redfrog = Redfrog(self.visible_sprites,position=(500,350))
+        self.redfrog = Redfrog(self.camera_group,position=(500,350))
 
     def update(self):
-        self.visible_sprites.update()
+        self.camera_group.update()
+        self.camera_group.interactables_update(self.player)
 
     def draw(self):
         draw_text('OverWorld', pygame.font.SysFont('comicsans', 60), (0,0,0), self.display, 20, 20)
-        self.visible_sprites.draw(self.display)
-        
+        #self.camera_group.camera_draw(self.display,target=self.player)
+        self.camera_group.draw(self.display)
 
 class Batteling(Gameworld):
     def __init__(self,display,*args,**kwargs) -> None:
@@ -64,8 +62,8 @@ class Batteling(Gameworld):
 class GameManager:
     def __init__(self):
         pygame.init()
-        self.display= pygame.display.set_mode((600, 800))
-        pygame.display.set_caption("really Cool")
+        self.display= pygame.display.set_mode((1360, 920))
+        
         self.clock = pygame.time.Clock()   
         self.player = Player(position=(100,100))
         self.states = {
@@ -87,7 +85,6 @@ class GameManager:
 
 
     def draw(self):
-        draw_text(str(self.clock.get_fps()), pygame.font.SysFont('comicsans', 30), (0,0,0), self.display, 20, 100)
         self.state.draw()
 
     def run(self):

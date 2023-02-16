@@ -1,0 +1,5 @@
+EVENT_TYPES = [
+    "PLAYER_HIT_EVENT",  
+    "PLAYER_DEATH_EVENT", 
+    "PLAYER_MOVE_EVENT","PRINT"
+    ]
